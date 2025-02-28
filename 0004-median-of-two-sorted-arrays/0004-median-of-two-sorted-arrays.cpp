@@ -1,37 +1,15 @@
 class Solution {
 public:
-    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        if (nums1.size() > nums2.size()) {
-            return findMedianSortedArrays(nums2, nums1);
-        }
+    double findMedianSortedArrays(vector<int>& v1, vector<int>& v2) {
 
-        int m = nums1.size();
-        int n = nums2.size();
-        int low = 0, high = m;
+        int n1=v1.size(),n2=v2.size();
+        v1.insert(v1.end(),v2.begin(),v2.end());
+        sort(v1.begin(),v1.end());
+        
+        if((n1+n2)%2!=0)
+        return v1[(n1+n2)/2];
 
-        while (low <= high) {
-            int partition1 = (low + high) / 2;
-            int partition2 = (m + n + 1) / 2 - partition1;
-
-            int maxLeft1 = (partition1 == 0) ? INT_MIN : nums1[partition1 - 1];
-            int minRight1 = (partition1 == m) ? INT_MAX : nums1[partition1];
-
-            int maxLeft2 = (partition2 == 0) ? INT_MIN : nums2[partition2 - 1];
-            int minRight2 = (partition2 == n) ? INT_MAX : nums2[partition2];
-
-            if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1) {
-                if ((m + n) % 2 == 0) {
-                    return (max(maxLeft1, maxLeft2) + min(minRight1, minRight2)) / 2.0;
-                } else {
-                    return max(maxLeft1, maxLeft2);
-                }
-            } else if (maxLeft1 > minRight2) {
-                high = partition1 - 1;
-            } else {
-                low = partition1 + 1;
-            }
-        }
-
-        throw invalid_argument("Input arrays are not sorted");
+        double ans=(v1[(n1+n2)/2]+v1[((n1+n2)/2)-1])/2.0;
+        return ans;
     }
 };
